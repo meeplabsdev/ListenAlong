@@ -1,7 +1,6 @@
 # Custom Rules
 *config.*
 output/*
-themes/*
 *driver.exe
 
 # Byte-compiled / optimized / DLL files
