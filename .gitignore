@@ -1,6 +1,7 @@
 # Custom Rules
 *config.*
 output/*
+mybuilds/*
 *driver.exe
 
 # Byte-compiled / optimized / DLL files
