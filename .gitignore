@@ -1,5 +1,6 @@
 # Custom Rules
 *config.*
+config.json
 output/*
 themes/*
 *driver.exe
