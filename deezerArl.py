@@ -61,14 +61,17 @@ def get_arl():
     with open("config.json") as json_data_file:
         config = json.load(json_data_file)
 
-    if (config['username'] and config['username'] != "" and config['password'] and config['password'] != ""):
-        manual = False
-
-    thisArl = _get_arl({
-        'manual': manual,
-        'username': config['username'],
-        'password': config['password'],
-    })
+    thisArl = False
+    if ('username' in config and config['username'] != "" and 'password' in config and config['password'] != ""):
+        thisArl = _get_arl({
+            'manual': False,
+            'username': config['username'],
+            'password': config['password'],
+        })
+    else:
+        thisArl = _get_arl({
+            'manual': True,
+        })
 
     if (thisArl != False):
         return thisArl
