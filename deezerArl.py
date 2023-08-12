@@ -76,4 +76,4 @@ def get_arl():
     if (thisArl != False):
         return thisArl
     else:
-        return get_arl(manual=manual)
+        return get_arl()
