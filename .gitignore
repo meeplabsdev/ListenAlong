@@ -1,6 +1,7 @@
 # Custom Rules
 *config.*
 output/*
+themes/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
