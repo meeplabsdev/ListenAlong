@@ -94,11 +94,11 @@ def setInterval(function, interval, *args):
     interval_thread.start()
 
 root = ThemedTk()
-root.tk.call('lappend', 'auto_path', './themes')
-root.tk.call('package', 'require', 'awdark')
+# root.tk.call('lappend', 'auto_path', './themes')
+# root.tk.call('package', 'require', 'awdark')
 
 s = Style()
-s.theme_use('awdark')
+# s.theme_use('awdark')
 
 root.geometry(f"{WIDTH}x{HEIGHT}")
 root.wm_title("Listen Along Player")
