@@ -1,7 +1,7 @@
 import json, os
 
 from time import sleep
-from fake_useragent.fake import UserAgent
+# from fake_useragent.fake import UserAgent
 from selenium.webdriver import Edge
 from selenium.webdriver.edge.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
@@ -16,8 +16,8 @@ field_ids = {
 
 def _get_arl(deezer, wait_time=0.5):
     options = Options()
-    ua = UserAgent()
-    user_agent = ua.random
+    # ua = UserAgent()
+    user_agent = "'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.82'"
     options.add_argument(f'user-agent={user_agent}')
     options.add_argument('log-level=3')
 
