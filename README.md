@@ -7,6 +7,20 @@ A python audio player using the deezer API as an alternative to spotify listen a
 - [@meeplabsdev](https://www.github.com/meeplabsdev)
   
   ## Usage/Examples
+  
+  ### From Release
+  
+  - Download the latest release from Releases.
+  
+  - Unzip to a folder.
+  
+  - Make sure you have ffmpeg installed.
+  
+  - Run setup.exe and login with deezer.
+  
+  - Run client.exe or server.exe to run the client or server.
+  
+  ### From Source
 
 Initial setup
 
