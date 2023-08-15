@@ -18,11 +18,9 @@ python setup.py
 
 You will be asked to login with deezer; A free account will work perfectly fine, however premium accounts will have access to better quality audio.
 
-
-
 Installing the dependencies: `cd` into the directory which you extracted the files into and run `pip install -r requirements.txt`.
 
-You must also have ffmpeg installed:    `winget install ffmpeg`.
+You must also have ffmpeg installed: [How To Install FFMPEG on Windows 10](https://www.youtube.com/watch?v=r1AtmY-RMyQ)
 
 ---
 
