@@ -36,6 +36,7 @@ class Hoster:
 
     def respondReqHttp(self):
         webServer = HTTPServer((self.host, self.port + 1), self.HttpServer)
+        self.HttpServer.set_respond(self.HttpServer, self.respond)
 
         try:
             webServer.serve_forever()
@@ -46,10 +47,10 @@ class Hoster:
 
     class HttpServer(BaseHTTPRequestHandler):
         def set_respond(self, respond):
-            self.respond = respond
+            self.f_respond = respond
 
         def do_GET(self):
             self.send_response(200)
             self.send_header("Content-type", "text/plain")
             self.end_headers()
-            self.wfile.write(Hoster.respond((self.path.replace("\\", "/").replace("/", ""))))
+            self.wfile.write(self.f_respond((self.path.replace("\\", "/").replace("/", ""))))
