@@ -34,11 +34,12 @@ Running the server
 python server.py
 ```
 
-GUI WORK IN PROGRESS
-The server automatically controls the songs and sends info to connected clients. There are two options for connecting:
+The server automatically controls the songs and sends info to connected clients. A simple, intuitive UI gives you the ability to control the songs and queue. Songs can be added by a name search or by their deezer song id. There are two options for connecting:
 
 - HTTP
+  
   - Runs on `http://localhost:36672`
+  
   - A tunnelling service such as tunnelmole can be used to expose the server to outside clients. 
     
     ```cmd
@@ -49,6 +50,9 @@ The server automatically controls the songs and sends info to connected clients.
     
     Connect on a client using http://url.here:80
     If you neglect the `:80`, the client will attempt to connect on HTTP http://url.here:36672 and http://url.here:36671.
+
 - TCP
+  
   - Runs on `localhost:36671` (no `http://`)
+  - Probably quicker
   - Could also tunnel this for outside clients.
