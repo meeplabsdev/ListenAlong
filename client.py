@@ -70,14 +70,17 @@ def startDiscordPresence(info):
     d_thread.start()
 
 def discordPresence(info):
-    client_id = '1139221310065623114'
-    RPC = Presence(client_id)
-    RPC.connect()
+    try:
+        client_id = '1139221310065623114'
+        RPC = Presence(client_id)
+        RPC.connect()
 
-    while True:  # The presence will stay on as long as the program is running
-        # state=info.line_2, 
-        RPC.update(details=info.line_1, large_image="icon", start=(time.time() - info.elapsed), buttons=[{"label": "Listen Along", "url": "https://github.com/meeplabsdev/listenalong"}])
-        time.sleep(15) # Can only update rich presence every 15 seconds
+        while True:  # The presence will stay on as long as the program is running
+            # state=info.line_2, 
+            RPC.update(details=info.line_1, large_image="icon", start=(time.time() - info.elapsed), buttons=[{"label": "Listen Along", "url": "https://github.com/meeplabsdev/listenalong"}])
+            time.sleep(15) # Can only update rich presence every 15 seconds
+    except:
+        pass
 
 def interval_function(function, interval, *args):
     while True:
@@ -164,10 +167,10 @@ def match_target_amplitude(sound, target_dBFS):
     change_in_dBFS = target_dBFS - sound.dBFS
     return sound.apply_gain(change_in_dBFS)
 
-def playSong(songname, startSeconds):
+def playSong(id, startSeconds):
     global c
 
-    song = AudioSegment.from_mp3(os.path.join(download_dir, songname + ".mp3"))
+    song = AudioSegment.from_mp3(os.path.join(download_dir, str(id) + ".mp3"))
     song = song[(startSeconds * 1000):]
     song = match_target_amplitude(song, -30.0)
 
@@ -184,35 +187,45 @@ def update_ui(ip, ui):
     response = response["song"]
     name = response["name"]
     artist = response["artist"]
+    id = response["id"]
     time = secondsToTime(max(response["time"], 0))
-
-    if (response and (response["id"] != ui.prev_song_id)):
-        ui.prev_song_id = response["id"]
-        track = deezer.get_track(response["id"])
-        cover_url = deezer.get_album(track['info']['DATA']['ALB_ID'])['cover_medium']
-        bgimg = ImageTk.PhotoImage(Image.open(requests.get(cover_url, stream=True).raw).resize((min(WIDTH, HEIGHT),min(WIDTH, HEIGHT)), resample=Image.NEAREST))
-        ui.background_label.config(image=bgimg)
-        ui.background_label.image=bgimg
-        # ui.background_label.place(x=max((WIDTH-HEIGHT) / 2, 0), y=max((HEIGHT-WIDTH) / 2, 0))
-        ui.background_label.place(x=-2, y=0)
-
-        c.stop()
-
-        if (not os.path.exists(os.path.join(download_dir, name + ".mp3"))):
-            track["download"](download_dir, quality=track_formats.MP3_320, with_lyrics=False, with_metadata=True, filename=name)
-
-    if (not c.get_busy()):
-        response = request(ip, "song")
-        if (response == False): return
-        response = response["song"]
-        if (response and (float(response["length"]) > (response["time"] + 6))):
-            playSong(name, max(response["time"], 0))
 
     now_playing_text = center_text(f'{name}\n{artist}\n{time}')
     ui.now_playing.config(text=now_playing_text)
 
     info.line_1 = f"{name} - {artist}"
     info.elapsed = response["time"]
+
+    if (response and (response["id"] != ui.prev_song_id)):
+        ui.prev_song_id = response["id"]
+        if (response["id"] > 0):
+            c.stop()
+
+            track = deezer.get_track(response["id"])
+            if (not os.path.exists(os.path.join(download_dir, str(id) + ".mp3"))):
+                track["download"](download_dir, quality=track_formats.MP3_320, with_lyrics=False, with_metadata=True, filename=f"{id}")
+        
+            ui.now_playing.place(relx=0, rely=0.25, anchor=tk.W)
+            cover_url = deezer.get_album(track['info']['DATA']['ALB_ID'])['cover_medium']
+            bgimg = ImageTk.PhotoImage(Image.open(requests.get(cover_url, stream=True).raw).resize((min(WIDTH, HEIGHT),min(WIDTH, HEIGHT)), resample=Image.NEAREST))
+            ui.background_label.config(image=bgimg)
+            ui.background_label.image=bgimg
+            ui.background_label.place(x=-2, y=0)
+        else:
+            c.stop()
+
+            ui.now_playing.place_forget()
+            bgimg = ImageTk.PhotoImage(Image.open("icon.png").resize((min(WIDTH, HEIGHT),min(WIDTH, HEIGHT)), resample=Image.NEAREST))
+            ui.background_label.config(image=bgimg)
+            ui.background_label.image=bgimg
+            ui.background_label.place(x=-2, y=0)
+
+    if (not c.get_busy()):
+        response = request(ip, "song")
+        if (response == False): return
+        response = response["song"]
+        if (response and (float(response["length"]) > (response["time"] + 6))):
+            playSong(f"{id}", max(response["time"], 0))
 
 def setup_ui(ip):
     ui.now_playing = Label(text="\n\n")
@@ -293,6 +306,6 @@ ui.entry.focus_set()
 
 startDiscordPresence(info)
 
-root.resizable(False,False)
+root.resizable(False, False)
 root.attributes('-topmost',True)
 root.mainloop()
