@@ -14,7 +14,7 @@ field_ids = {
     'button': 'login_form_submit'
 }
 
-def _get_arl(deezer):
+def _get_arl(deezer, wait_time=0.5):
     options = Options()
     ua = UserAgent()
     user_agent = ua.random
@@ -25,39 +25,43 @@ def _get_arl(deezer):
     driver.minimize_window()
     driver.get("https://www.deezer.com/en/login")
 
-    sleep(0.1)
-
-    driver.find_element(value=field_ids['gdpr']).click()
-
-    if (not deezer['manual']):
-        sleep(0.1)
-
-        driver.find_element(value=field_ids['username']).send_keys(deezer['username'])
-        driver.find_element(value=field_ids['password']).send_keys(deezer['password'])
-
-        sleep(0.1)
-
-        driver.find_element(value=field_ids['button']).click()
-
-    driver.maximize_window()
     try:
-        wait = WebDriverWait(driver, 600)
-        wait.until(lambda driver: driver.current_url == "https://www.deezer.com/en/")
-    except TimeoutException:
+        sleep(wait_time)
+
+        driver.find_element(value=field_ids['gdpr']).click()
+
+        if (not deezer['manual']):
+            sleep(wait_time)
+
+            driver.find_element(value=field_ids['username']).send_keys(deezer['username'])
+            driver.find_element(value=field_ids['password']).send_keys(deezer['password'])
+
+            sleep(wait_time)
+
+            driver.find_element(value=field_ids['button']).click()
+
+        driver.maximize_window()
+        try:
+            wait = WebDriverWait(driver, 600)
+            wait.until(lambda driver: driver.current_url == "https://www.deezer.com/en/")
+        except TimeoutException:
+            return False
+        sleep(wait_time)
+
+        cookies = driver.get_cookies()
+
+        for x in cookies:
+            if x['name'] == 'arl':
+                driver.quit()
+                return x['value']
+
+        driver.quit()
         return False
-    sleep(0.1)
+    except:
+        driver.quit()
+        return False
 
-    cookies = driver.get_cookies()
-
-    for x in cookies:
-        if x['name'] == 'arl':
-            driver.quit()
-            return x['value']
-
-    driver.quit()
-    return False
-
-def get_arl():
+def get_arl(wait=0.5):
     with open("config.json") as json_data_file:
         config = json.load(json_data_file)
 
@@ -67,13 +71,13 @@ def get_arl():
             'manual': False,
             'username': config['username'],
             'password': config['password'],
-        })
+        }, wait_time=wait)
     else:
         thisArl = _get_arl({
             'manual': True,
-        })
+        }, wait_time=wait)
 
     if (thisArl != False):
         return thisArl
     else:
-        return get_arl()
+        return get_arl(wait=wait + 1)
