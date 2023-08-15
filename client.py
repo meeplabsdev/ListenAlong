@@ -224,7 +224,7 @@ def update_ui(ip, ui):
         response = request(ip, "song")
         if (response == False): return
         response = response["song"]
-        if (response and (float(response["length"]) > (response["time"] + 6)) and response["id"] != 0):
+        if (response and (float(response["length"]) > (response["time"] + 6)) and id != 0):
             playSong(f"{id}", max(response["time"], 0))
 
 def setup_ui(ip):
