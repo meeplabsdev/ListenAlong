@@ -10,11 +10,19 @@ A python audio player using the deezer API as an alternative to spotify listen a
 
 Initial setup
 
+Download the zip file of the code and extract it into a folder. Then `cd` into that folder and run:
+
 ```cmd
 python setup.py
 ```
 
 You will be asked to login with deezer; A free account will work perfectly fine, however premium accounts will have access to better quality audio.
+
+
+
+Installing the dependencies: `cd` into the directory which you extracted the files into and run `pip install -r requirements.txt`.
+
+You must also have ffmpeg installed:    `winget install ffmpeg`.
 
 ---
 
