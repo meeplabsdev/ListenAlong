@@ -139,6 +139,8 @@ class Player:
                 self.app.update_slider(int(self.playback_seconds), self.song["length"])
                 if (self.has_song_ended()):
                     self.app.next_song() # Simulate button press
+            
+            time.sleep(0.1)
 
 if __name__ == "__main__":
     app = MusicPlayerApp()
