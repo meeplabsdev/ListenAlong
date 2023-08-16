@@ -2,6 +2,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 
 import socket
 import threading
+import time
 
 class Hoster:
     def __init__(self, respond):
@@ -9,11 +10,11 @@ class Hoster:
         self.port = 36671 # TCP, HTTP is 36672
         self.respond = respond
 
-        r_thread = threading.Thread(target=self.respondReq)
+        r_thread = threading.Thread(target=self.respondReq) # TCP
         r_thread.daemon = True
         r_thread.start()
 
-        rh_thread = threading.Thread(target=self.respondReqHttp)
+        rh_thread = threading.Thread(target=self.respondReqHttp) # HTTP
         rh_thread.daemon = True
         rh_thread.start()
 
